@@ -14,6 +14,8 @@ type MockDataAvailabilityLayerClient struct {
 	Blocks []*types.Block
 }
 
+var _ da.DataAvailabilityLayerClient = &MockDataAvailabilityLayerClient{}
+
 // Init is called once to allow DA client to read configuration and initialize resources.
 func (m *MockDataAvailabilityLayerClient) Init(config []byte, logger log.Logger) error {
 	m.logger = logger
@@ -36,6 +38,7 @@ func (m *MockDataAvailabilityLayerClient) Stop() error {
 // This should create a transaction which (potentially)
 // triggers a state transition in the DA layer.
 func (m *MockDataAvailabilityLayerClient) SubmitBlock(block *types.Block) da.ResultSubmitBlock {
+	m.logger.Debug("Block submitted to DA layer!")
 	m.Blocks = append(m.Blocks, block)
 
 	return da.ResultSubmitBlock{
